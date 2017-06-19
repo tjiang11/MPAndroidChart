@@ -49,8 +49,8 @@ public class RangeChartRenderer extends BarLineScatterCandleBubbleRenderer {
 
         Transformer trans = mChart.getTransformer(dataSet.getAxisDependency());
 
-        //float phaseY = mAnimator.getPhaseY();
-        float phaseY = 1;
+        float phaseY = mAnimator.getPhaseY();
+        float barSpace = dataSet.getBarSpace();
 
         mXBounds.set(mChart, dataSet);
 
@@ -67,9 +67,9 @@ public class RangeChartRenderer extends BarLineScatterCandleBubbleRenderer {
                 float close = rep.getClose();
                 float open = rep.getOpen();
 
-                mBodyBuffers[0] = xPos - 0.5f;
+                mBodyBuffers[0] = xPos - 0.5f + barSpace;
                 mBodyBuffers[1] = close * phaseY;
-                mBodyBuffers[2] = xPos + 0.5f;
+                mBodyBuffers[2] = xPos + 0.5f - barSpace;
                 mBodyBuffers[3] = open * phaseY;
 
                 trans.pointValuesToPixel(mBodyBuffers);

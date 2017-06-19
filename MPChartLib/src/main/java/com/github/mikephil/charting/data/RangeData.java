@@ -14,6 +14,7 @@ public class RangeData extends BarLineScatterCandleBubbleData<IRangeDataSet> {
 
     public RangeData(List<IRangeDataSet> dataSets) { super(dataSets); }
 
+    // Order here is important. Data sets later in the array will show over earlier ones.
     public RangeData(IRangeDataSet... dataSets) {
         super(dataSets);
     }

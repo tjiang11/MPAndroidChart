@@ -30,5 +30,13 @@ public interface IRangeDataSet extends IBarLineScatterCandleBubbleDataSet<RangeE
      */
     int getHighLightAlpha();
 
+    /**
+     * Returns the space that is left out on the left and right side of each
+     * candle.
+     *
+     * @return
+     */
+    float getBarSpace();
+
 
 }

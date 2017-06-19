@@ -11,6 +11,11 @@ import java.util.List;
 
 public class RangeDataSet extends LineScatterCandleRadarDataSet<RangeEntry> implements IRangeDataSet {
 
+    /**
+     * the space between the candle entries, default 0.1f (10%)
+     */
+    private float mBarSpace = 0.1f;
+
     public RangeDataSet(List<RangeEntry> rangeEntryPoints, String label) {
         super(rangeEntryPoints, label);
     }
@@ -33,5 +38,10 @@ public class RangeDataSet extends LineScatterCandleRadarDataSet<RangeEntry> impl
     @Override
     public int getBarBorderColor() {
         return 0;
+    }
+
+    @Override
+    public float getBarSpace() {
+        return mBarSpace;
     }
 }
