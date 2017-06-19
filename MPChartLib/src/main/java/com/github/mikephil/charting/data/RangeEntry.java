@@ -22,4 +22,8 @@ public class RangeEntry extends Entry {
     public RangeEntryPoint getRange(int index) {
         return this.mRanges.get(index);
     }
+
+    public ArrayList<RangeEntryPoint> getRanges() {
+        return mRanges;
+    }
 }
