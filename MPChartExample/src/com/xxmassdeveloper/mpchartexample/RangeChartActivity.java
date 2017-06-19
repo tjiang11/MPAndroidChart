@@ -7,6 +7,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.RangeChart;
+import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.RangeData;
@@ -41,6 +42,8 @@ public class RangeChartActivity extends DemoBase implements SeekBar.OnSeekBarCha
 
         seekBar.setOnSeekBarChangeListener(this);
 
+        mChart.getDescription().setEnabled(false);
+
         XAxis xAxis = mChart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setTypeface(mTfLight);
@@ -54,12 +57,54 @@ public class RangeChartActivity extends DemoBase implements SeekBar.OnSeekBarCha
 
         YAxis leftAxis = mChart.getAxisLeft();
         leftAxis.setTypeface(mTfLight);
+        leftAxis.setTextSize(14.0f);
         leftAxis.setLabelCount(8, false);
-        leftAxis.setValueFormatter(new DefaultAxisValueFormatter(0));
+        leftAxis.setValueFormatter(new IAxisValueFormatter() {
+            @Override
+            public String getFormattedValue(float value, AxisBase axis) {
+                int militaryHour = (int) Math.round(Math.floor(value));
+                int displayHour = militaryHour;
+                String amPm;
+                String minute;
+
+                if (displayHour == 0) {
+                    displayHour = 12;
+                }
+
+                if (displayHour > 12) {
+                    displayHour -= 12;
+                }
+
+                if (militaryHour >= 12 && militaryHour != 24) {
+                    amPm = "PM";
+                } else {
+                    amPm = "AM";
+                }
+
+                if (value - Math.floor(value) == 0.5) {
+                    minute = ":30";
+                } else if (value - Math.floor(value) == 0.25) {
+                    minute = ":15";
+                } else if (value - Math.floor(value) == 0.75) {
+                    minute = ":45";
+                } else {
+                    minute = "";
+                }
+
+                return displayHour + minute + amPm;
+            }
+        });
+        leftAxis.setInverted(true);
         leftAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);
         leftAxis.setSpaceTop(15f);
         leftAxis.setAxisMinimum(0f); // this replaces setStartAtZero(true)
         leftAxis.setAxisMaximum(24f);
+        leftAxis.setDrawGridLines(true);
+        leftAxis.setGranularityEnabled(true);
+        leftAxis.setGranularity(.25f);
+
+        YAxis rightAxis = mChart.getAxisRight();
+        rightAxis.setEnabled(false);
 
         setData(10);
     }
