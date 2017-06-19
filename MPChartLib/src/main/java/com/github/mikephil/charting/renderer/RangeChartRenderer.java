@@ -81,7 +81,6 @@ public class RangeChartRenderer extends BarLineScatterCandleBubbleRenderer {
                                mBodyBuffers[2], mBodyBuffers[1],
                                mRenderPaint);
                 }
-
             }
         }
 

@@ -26,6 +26,9 @@ public class RangeChart extends BarLineChartBase<RangeData> implements RangeData
         super.init();
 
         mRenderer = new RangeChartRenderer(this, mAnimator, mViewPortHandler);
+
+        getXAxis().setSpaceMin(0.5f);
+        getXAxis().setSpaceMax(0.5f);
     }
 
     @Override

@@ -50,6 +50,8 @@ public class RangeChartActivity extends DemoBase implements SeekBar.OnSeekBarCha
         IAxisValueFormatter xAxisFormatter = new DefaultAxisValueFormatter(0);
         xAxis.setValueFormatter(xAxisFormatter);
 
+        xAxis.resetAxisMaximum();
+
         YAxis leftAxis = mChart.getAxisLeft();
         leftAxis.setTypeface(mTfLight);
         leftAxis.setLabelCount(8, false);
@@ -59,64 +61,20 @@ public class RangeChartActivity extends DemoBase implements SeekBar.OnSeekBarCha
         leftAxis.setAxisMinimum(0f); // this replaces setStartAtZero(true)
         leftAxis.setAxisMaximum(24f);
 
-        setData();
-    }
-
-    private void setData() {
-        ArrayList<RangeEntryPoint> entryPoints = new ArrayList<>();
-        ArrayList<RangeEntryPoint> entryPoints2 = new ArrayList<>();
-
-        ArrayList<RangeEntryPoint> entryPoints3 = new ArrayList<>();
-
-        RangeEntryPoint r1 = new RangeEntryPoint(0.2f, 0.5f);
-        RangeEntryPoint r2 = new RangeEntryPoint(0.65f, 0.7f);
-        RangeEntryPoint r3 = new RangeEntryPoint(1f, 3.5f);
-        RangeEntryPoint r4 = new RangeEntryPoint(5f, 7.5f);
-
-        RangeEntryPoint r5 = new RangeEntryPoint(2f, 3f);
-        RangeEntryPoint r6 = new RangeEntryPoint(6f, 8f);
-
-        entryPoints.add(r1);
-        entryPoints.add(r2);
-
-        entryPoints2.add(r3);
-        entryPoints2.add(r4);
-
-        entryPoints3.add(r5);
-        entryPoints3.add(r6);
-
-        RangeEntry rangeEntry = new RangeEntry(0, entryPoints);
-        RangeEntry rangeEntry2 = new RangeEntry(1, entryPoints2);
-        RangeEntry rangeEntry3 = new RangeEntry(1, entryPoints3);
-
-        ArrayList<RangeEntry> s1 = new ArrayList<>();
-        s1.add(rangeEntry);
-        s1.add(rangeEntry2);
-
-        ArrayList<RangeEntry> s2 = new ArrayList<>();
-        s2.add(rangeEntry3);
-
-        RangeDataSet rangeDataSet = new RangeDataSet(s1, "set 1");
-        RangeDataSet rangeDataSet2 = new RangeDataSet(s2, "set 2");
-        rangeDataSet2.setColor(Color.RED);
-        //RangeDataSet rangeDataSet2 = new RangeDataSet(s2, "set 2");
-
-
-        RangeData rangeData = new RangeData(rangeDataSet, rangeDataSet2);
-
-        mChart.setData(rangeData);
+        setData(10);
     }
 
     private void setData(int numEntries) {
 
         ArrayList<RangeEntry> rangeEntriesBlue = new ArrayList<>();
         ArrayList<RangeEntry> rangeEntriesRed = new ArrayList<>();
+        ArrayList<RangeEntry> rangeEntriesGreen = new ArrayList<>();
 
         for (int i = 0; i < numEntries; i++) {
 
             ArrayList<RangeEntryPoint> entryPointsBlue = new ArrayList<>();
             ArrayList<RangeEntryPoint> entryPointsRed = new ArrayList<>();
-
+            ArrayList<RangeEntryPoint> entryPointsGreen = new ArrayList<>();
 
             for (int j = 0; j < 3; j++) {
 
@@ -136,19 +94,37 @@ public class RangeChartActivity extends DemoBase implements SeekBar.OnSeekBarCha
                 entryPointsRed.add(new RangeEntryPoint(start, end));
             }
 
+            for (int j = 0; j < 3; j++) {
+
+                float start = (float) Math.random() * 20;
+                float duration = (float) Math.random() * 5;
+                float end = start + duration;
+
+                entryPointsGreen.add(new RangeEntryPoint(start, end));
+            }
+
+
             RangeEntry rangeEntryBlue = new RangeEntry(i, entryPointsBlue);
             RangeEntry rangeEntryRed = new RangeEntry(i, entryPointsRed);
+            RangeEntry rangeEntryGreen = new RangeEntry(i, entryPointsGreen);
 
             rangeEntriesBlue.add(rangeEntryBlue);
             rangeEntriesRed.add(rangeEntryRed);
+            rangeEntriesGreen.add(rangeEntryGreen);
         }
 
         RangeDataSet rangeDataSetBlue = new RangeDataSet(rangeEntriesBlue, "Blue");
-        rangeDataSetBlue.setColor(Color.CYAN);
+        rangeDataSetBlue.setColor(Color.BLUE);
         RangeDataSet rangeDataSetRed = new RangeDataSet(rangeEntriesRed, "Red");
         rangeDataSetRed.setColor(Color.RED);
+        RangeDataSet rangeDataSetGreen = new RangeDataSet(rangeEntriesGreen, "Green");
+        rangeDataSetGreen.setColor(Color.GREEN);
 
-        RangeData rangeData = new RangeData(rangeDataSetBlue, rangeDataSetRed);
+        // Later data sets are drawn over earlier ones.
+        RangeData rangeData = new RangeData(
+                rangeDataSetBlue,
+                rangeDataSetRed,
+                rangeDataSetGreen);
 
         mChart.setData(rangeData);
     }
