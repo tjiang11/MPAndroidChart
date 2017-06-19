@@ -5,6 +5,7 @@ import android.util.AttributeSet;
 
 import com.github.mikephil.charting.data.RangeData;
 import com.github.mikephil.charting.interfaces.dataprovider.RangeDataProvider;
+import com.github.mikephil.charting.renderer.RangeChartRenderer;
 
 /**
  * Created by TJiang on 6/19/2017.
@@ -24,7 +25,7 @@ public class RangeChart extends BarLineChartBase<RangeData> implements RangeData
     protected void init() {
         super.init();
 
-        //RangeChartRenderer
+        mRenderer = new RangeChartRenderer(this, mAnimator, mViewPortHandler);
     }
 
     @Override
