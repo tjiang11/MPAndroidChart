@@ -1,12 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <com.github.mikephil.charting.charts.RangeChart
-        android:id="@+id/range_chart"
+        android:id="@+id/rangeChart"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_above="@id/seekBar1"/>
 
-</LinearLayout>
+    <SeekBar
+        android:id="@+id/seekBar1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_margin="8dp"
+        android:layout_toLeftOf="@+id/textView1"
+        android:layout_marginRight="5dp"
+        android:max="150"
+        android:paddingBottom="12dp"/>
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/seekBar1"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="15dp"
+        android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+</RelativeLayout>

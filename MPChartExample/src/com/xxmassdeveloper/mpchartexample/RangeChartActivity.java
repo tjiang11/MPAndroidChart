@@ -1,7 +1,10 @@
 package com.xxmassdeveloper.mpchartexample;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.widget.SeekBar;
+import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.RangeChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -20,9 +23,11 @@ import java.util.ArrayList;
  * Created by TJiang on 6/19/2017.
  */
 
-public class RangeChartActivity extends DemoBase {
+public class RangeChartActivity extends DemoBase implements SeekBar.OnSeekBarChangeListener {
 
     protected RangeChart mChart;
+    private SeekBar seekBar;
+    private TextView textView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -30,7 +35,11 @@ public class RangeChartActivity extends DemoBase {
 
         setContentView(R.layout.activity_rangechart);
 
-        mChart = (RangeChart) findViewById(R.id.range_chart);
+        mChart = (RangeChart) findViewById(R.id.rangeChart);
+        seekBar = (SeekBar) findViewById(R.id.seekBar1);
+        textView = (TextView) findViewById(R.id.textView1);
+
+        seekBar.setOnSeekBarChangeListener(this);
 
         XAxis xAxis = mChart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
@@ -48,28 +57,116 @@ public class RangeChartActivity extends DemoBase {
         leftAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);
         leftAxis.setSpaceTop(15f);
         leftAxis.setAxisMinimum(0f); // this replaces setStartAtZero(true)
+        leftAxis.setAxisMaximum(24f);
 
         setData();
     }
 
     private void setData() {
         ArrayList<RangeEntryPoint> entryPoints = new ArrayList<>();
+        ArrayList<RangeEntryPoint> entryPoints2 = new ArrayList<>();
+
+        ArrayList<RangeEntryPoint> entryPoints3 = new ArrayList<>();
 
         RangeEntryPoint r1 = new RangeEntryPoint(0.2f, 0.5f);
         RangeEntryPoint r2 = new RangeEntryPoint(0.65f, 0.7f);
+        RangeEntryPoint r3 = new RangeEntryPoint(1f, 3.5f);
+        RangeEntryPoint r4 = new RangeEntryPoint(5f, 7.5f);
+
+        RangeEntryPoint r5 = new RangeEntryPoint(2f, 3f);
+        RangeEntryPoint r6 = new RangeEntryPoint(6f, 8f);
 
         entryPoints.add(r1);
         entryPoints.add(r2);
 
+        entryPoints2.add(r3);
+        entryPoints2.add(r4);
+
+        entryPoints3.add(r5);
+        entryPoints3.add(r6);
+
         RangeEntry rangeEntry = new RangeEntry(0, entryPoints);
+        RangeEntry rangeEntry2 = new RangeEntry(1, entryPoints2);
+        RangeEntry rangeEntry3 = new RangeEntry(1, entryPoints3);
 
         ArrayList<RangeEntry> s1 = new ArrayList<>();
         s1.add(rangeEntry);
+        s1.add(rangeEntry2);
+
+        ArrayList<RangeEntry> s2 = new ArrayList<>();
+        s2.add(rangeEntry3);
 
         RangeDataSet rangeDataSet = new RangeDataSet(s1, "set 1");
+        RangeDataSet rangeDataSet2 = new RangeDataSet(s2, "set 2");
+        rangeDataSet2.setColor(Color.RED);
+        //RangeDataSet rangeDataSet2 = new RangeDataSet(s2, "set 2");
 
-        RangeData rangeData = new RangeData(rangeDataSet);
+
+        RangeData rangeData = new RangeData(rangeDataSet, rangeDataSet2);
 
         mChart.setData(rangeData);
+    }
+
+    private void setData(int numEntries) {
+
+        ArrayList<RangeEntry> rangeEntriesBlue = new ArrayList<>();
+        ArrayList<RangeEntry> rangeEntriesRed = new ArrayList<>();
+
+        for (int i = 0; i < numEntries; i++) {
+
+            ArrayList<RangeEntryPoint> entryPointsBlue = new ArrayList<>();
+            ArrayList<RangeEntryPoint> entryPointsRed = new ArrayList<>();
+
+
+            for (int j = 0; j < 3; j++) {
+
+                float start = (float) Math.random() * 24;
+                float duration = (float) Math.random() * 5;
+                float end = start + duration;
+
+                entryPointsBlue.add(new RangeEntryPoint(start, end));
+            }
+
+            for (int j = 0; j < 3; j++) {
+
+                float start = (float) Math.random() * 20;
+                float duration = (float) Math.random() * 5;
+                float end = start + duration;
+
+                entryPointsRed.add(new RangeEntryPoint(start, end));
+            }
+
+            RangeEntry rangeEntryBlue = new RangeEntry(i, entryPointsBlue);
+            RangeEntry rangeEntryRed = new RangeEntry(i, entryPointsRed);
+
+            rangeEntriesBlue.add(rangeEntryBlue);
+            rangeEntriesRed.add(rangeEntryRed);
+        }
+
+        RangeDataSet rangeDataSetBlue = new RangeDataSet(rangeEntriesBlue, "Blue");
+        rangeDataSetBlue.setColor(Color.CYAN);
+        RangeDataSet rangeDataSetRed = new RangeDataSet(rangeEntriesRed, "Red");
+        rangeDataSetRed.setColor(Color.RED);
+
+        RangeData rangeData = new RangeData(rangeDataSetBlue, rangeDataSetRed);
+
+        mChart.setData(rangeData);
+    }
+
+    @Override
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+        textView.setText(String.valueOf(seekBar.getProgress() + 1));
+        setData(seekBar.getProgress() + 1);
+        mChart.invalidate();
+    }
+
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
+        // TODO Auto-generated method stub
     }
 }
