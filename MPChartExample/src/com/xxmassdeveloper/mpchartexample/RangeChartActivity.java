@@ -3,6 +3,8 @@ package com.xxmassdeveloper.mpchartexample;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -16,9 +18,16 @@ import com.github.mikephil.charting.data.RangeEntry;
 import com.github.mikephil.charting.data.RangeEntryPoint;
 import com.github.mikephil.charting.formatter.DefaultAxisValueFormatter;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
+import com.github.mikephil.charting.listener.ChartTouchListener;
+import com.github.mikephil.charting.listener.OnChartGestureListener;
+import com.github.mikephil.charting.utils.MPPointD;
+import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.xxmassdeveloper.mpchartexample.notimportant.DemoBase;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by TJiang on 6/19/2017.
@@ -55,10 +64,11 @@ public class RangeChartActivity extends DemoBase implements SeekBar.OnSeekBarCha
 
         xAxis.resetAxisMaximum();
 
-        YAxis leftAxis = mChart.getAxisLeft();
+        final YAxis leftAxis = mChart.getAxisLeft();
         leftAxis.setTypeface(mTfLight);
         leftAxis.setTextSize(14.0f);
         leftAxis.setLabelCount(8, false);
+
         leftAxis.setValueFormatter(new IAxisValueFormatter() {
             @Override
             public String getFormattedValue(float value, AxisBase axis) {
@@ -87,13 +97,16 @@ public class RangeChartActivity extends DemoBase implements SeekBar.OnSeekBarCha
                     minute = ":15";
                 } else if (value - Math.floor(value) == 0.75) {
                     minute = ":45";
-                } else {
+                } else if (value - Math.floor(value) == 0.0){
                     minute = "";
+                } else {
+                    return "";
                 }
 
                 return displayHour + minute + amPm;
             }
         });
+
         leftAxis.setInverted(true);
         leftAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);
         leftAxis.setSpaceTop(15f);
@@ -101,7 +114,62 @@ public class RangeChartActivity extends DemoBase implements SeekBar.OnSeekBarCha
         leftAxis.setAxisMaximum(24f);
         leftAxis.setDrawGridLines(true);
         leftAxis.setGranularityEnabled(true);
-        leftAxis.setGranularity(.25f);
+        leftAxis.setGranularity(1f);
+
+        mChart.setOnChartGestureListener(new OnChartGestureListener() {
+
+            @Override
+            public void onChartGestureStart(MotionEvent me, ChartTouchListener.ChartGesture lastPerformedGesture) {
+
+            }
+
+            @Override
+            public void onChartGestureEnd(MotionEvent me, ChartTouchListener.ChartGesture lastPerformedGesture) {
+
+            }
+
+            @Override
+            public void onChartLongPressed(MotionEvent me) {
+
+            }
+
+            @Override
+            public void onChartDoubleTapped(MotionEvent me) {
+
+            }
+
+            @Override
+            public void onChartSingleTapped(MotionEvent me) {
+
+            }
+
+            @Override
+            public void onChartFling(MotionEvent me1, MotionEvent me2, float velocityX, float velocityY) {
+
+            }
+
+            @Override
+            public void onChartScale(MotionEvent me, float scaleX, float scaleY) {
+                ViewPortHandler handler = mChart.getViewPortHandler();
+                MPPointD topLeft = mChart.getValuesByTouchPoint(handler.contentLeft(), handler.contentTop(), YAxis.AxisDependency.LEFT);
+                MPPointD bottomRight = mChart.getValuesByTouchPoint(handler.contentRight(), handler.contentBottom(), YAxis.AxisDependency.LEFT);
+
+                double visibleRange = bottomRight.y - topLeft.y;
+
+                if (visibleRange < 2.0) {
+                    leftAxis.setGranularity(.25f);
+                } else if (visibleRange < 4.5) {
+                    leftAxis.setGranularity(.5f);
+                } else {
+                    leftAxis.setGranularity(1f);
+                }
+            }
+
+            @Override
+            public void onChartTranslate(MotionEvent me, float dX, float dY) {
+
+            }
+        });
 
         YAxis rightAxis = mChart.getAxisRight();
         rightAxis.setEnabled(false);
