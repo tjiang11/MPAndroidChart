@@ -115,6 +115,7 @@ public class RangeChartActivity extends DemoBase implements SeekBar.OnSeekBarCha
         leftAxis.setDrawGridLines(true);
         leftAxis.setGranularityEnabled(true);
         leftAxis.setGranularity(1f);
+        leftAxis.setGridLineWidth(1.5f);
 
         mChart.setOnChartGestureListener(new OnChartGestureListener() {
 
@@ -158,7 +159,7 @@ public class RangeChartActivity extends DemoBase implements SeekBar.OnSeekBarCha
 
                 if (visibleRange < 2.0) {
                     leftAxis.setGranularity(.25f);
-                } else if (visibleRange < 4.5) {
+                } else if (visibleRange < 4.2) {
                     leftAxis.setGranularity(.5f);
                 } else {
                     leftAxis.setGranularity(1f);
